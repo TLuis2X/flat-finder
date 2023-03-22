@@ -9,7 +9,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -18,8 +18,6 @@ import TicketsComponent from "@/components/Tickets";
 import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/consultantdashboardright";
-import FavouriteListing from "@/components/favouritelisting";
-
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -83,6 +81,9 @@ const FlatifyDashboard = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const addListingRef = useRef();
+
   return (
     <Layout
       style={{
@@ -114,9 +115,6 @@ const FlatifyDashboard = () => {
           onClick={({ key }) => {
             if (key === "5") {
               handleLogout();
-            }
-            if (key === "3") {
-              setTabKey("1");
             } else {
               setTabKey(key);
             }
@@ -178,8 +176,8 @@ const FlatifyDashboard = () => {
               </div>
             </div>
           )}
-          {tabKey == "2" && <div>Result</div>}
-          {tabKey == "4" && <div>Inbox</div>}
+
+          {tabKey == "3" && <AddListingComponent ref={addListingRef} />}
         </Content>
         <Footer
           style={{
