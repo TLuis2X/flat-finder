@@ -10,6 +10,7 @@ export default class ListingService {
    */
   async getListings() {
     const response = await fetch(`${this.url}/listing`)
+    
     if (response.ok){
       const listings = await response.json()
       return listings
@@ -29,6 +30,7 @@ export default class ListingService {
       },
       body: JSON.stringify(listing)
     })
+
     if (response.ok) {
       const result = await response.json()
       return result

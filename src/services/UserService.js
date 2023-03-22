@@ -1,7 +1,7 @@
 import { User } from "@/models/User";
 
 export default class UserService {
-  constructor() {}
+  constructor() { }
 
   async register(supabase, name, email, password) {
     const { data, error } = await supabase.auth.signUp({
@@ -51,13 +51,11 @@ export default class UserService {
 
     // console.log(user_profile);
     return new User(user_profile.data[0]);
-    return response.data[0];
-    return user_profile.data[0];
   }
 
   async logout(supabase) {
     const { error } = await supabase.auth.signOut();
   }
 
-  async updateAvatar(url, profile_id) {}
+  async updateAvatar(url, profile_id) { }
 }

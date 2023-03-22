@@ -1,4 +1,4 @@
-class Ticket{
+class Ticket {
     id;
     create_at;
     content;
@@ -6,7 +6,7 @@ class Ticket{
     creator;
     status;
 
-    constructor(ticket){
+    constructor(ticket) {
         this.id = ticket.id
         this.create_at = ticket.create_at
         this.content = ticket.content
@@ -16,6 +16,6 @@ class Ticket{
     }
 }
 
-export{
+export {
     Ticket
 }
