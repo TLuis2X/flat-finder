@@ -1,7 +1,7 @@
 import React from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Card } from "antd";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import {
   Button,
   Col,
