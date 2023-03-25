@@ -18,6 +18,8 @@ import TicketsComponent from "@/components/Tickets";
 import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/consultantdashboardright";
+import FavouriteListing from "@/components/favouritelisting";
+import AddListingComponent from "@/components/AddListings";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -164,7 +166,10 @@ const FlatifyDashboard = () => {
               <div>
                 <FavouriteListing
                   listing={ listings[0] }
-                 />
+                />
+                <FavouriteListing
+                  listing={ listings[1] }
+                />
               </div>
               <div
                 style={{
