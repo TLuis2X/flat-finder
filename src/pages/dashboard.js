@@ -16,7 +16,7 @@ import AddListingComponent from "@/components/AddListings";
 import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
-import { items, emptyListing} from "@/utils";
+import { items, emptyListing } from "@/utils";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,8 +26,8 @@ function FlatifyDashboard() {
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [tickets, setTickets] = useState([])
-  const [listing, setListing] = useState(emptyListing)
+  const [tickets, setTickets] = useState([]);
+  const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
 
   const userService = new UserService();
@@ -50,7 +50,7 @@ function FlatifyDashboard() {
       ]);
       user_profile.is_admin && router.push("/admin");
       setUser(user_profile);
-      setListing(prevListing => ({...prevListing, owner: user_profile.id}))
+      setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
       const [new_favListings, new_tickets] = await Promise.all([
@@ -141,7 +141,8 @@ function FlatifyDashboard() {
         </Header>
         <Content
           style={{
-            margin: "0 50px",
+            margin: "0 20px",
+            // marginLeft: "10px",
           }}
         >
           <Breadcrumb
@@ -161,7 +162,7 @@ function FlatifyDashboard() {
               }}
             >
               <div>
-                <FavListings listings={listings} />
+                <FavListings favListings={favListings} />
               </div>
               <div
                 style={{
@@ -178,7 +179,9 @@ function FlatifyDashboard() {
             </div>
           )}
           {tabKey == "2" && <SearchResultPage listings={listings} />}
-          {tabKey == "3" && <AddListingComponent listing={listing} setListing={setListing}/>}
+          {tabKey == "3" && (
+            <AddListingComponent listing={listing} setListing={setListing} />
+          )}
         </Content>
         <Footer
           style={{
@@ -195,9 +198,10 @@ function FlatifyDashboard() {
           textAlign: "center",
           lineHeight: "120px",
           // color: "#fff",
-          width: 70,
-          padding: "40px",
+          // width: 200,
+          padding: "80px",
           overflow: "auto",
+          marginRight: "-10px",
         }}
       >
         <Space size={26} wrap>

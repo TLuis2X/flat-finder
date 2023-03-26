@@ -12,7 +12,7 @@ const contentStyle = {
   display: "flex",
   maxWidth: "max-content",
 };
-
+import { Divider, Space, Tag } from "antd";
 import {
   ChakraProvider,
   Stack,
@@ -24,9 +24,9 @@ import {
   Card,
   Text,
 } from "@chakra-ui/react";
+import { items } from "@/utils";
 const FavListings = (props) => {
-  const listings = props.listings;
-  const FavouriteListings = listings.map((listing) => listing);
+  const FavouriteListings = props.favListings.map((item) => item.listing);
   const [dotPosition, setDotPosition] = useState("left");
   const [indexC1, setIndexC1] = useState(0);
   const [indexC2, setIndexC2] = useState(0);
@@ -36,53 +36,65 @@ const FavListings = (props) => {
     setIndexC1(selectedIndex);
   };
   return (
-    <div style={{ display: "flex", marginLeft: "15px", textAlign: "center" }}>
-      {FavouriteListings.slice(0, 3).map((listing) => (
-        <Carousel
-          style={{
-            width: "350px",
-            padding: "5px",
-            overflow: "scroll",
-            whiteSpace: "nowrap",
-          }}
-        >
-          <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
-            <img
-              className="d-block w-150"
-              src={listing.images[0]}
-              alt="First slide"
-              style={{ width: "500px", height: "200px" }}
-            />
-            <Carousel.Caption>
-              <p>{listing.title}</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item activeIndex={indexC2} onSelect={handleSelect}>
-            <img
-              className="d-block w-100"
-              src={listing.images[1]}
-              alt="Second slide"
-              style={{ width: "500px", height: "200px" }}
-            />
+    <div>
+      <Divider
+        orientation="middle"
+        style={{
+          textAlign: "left",
+          fontFamily: "IBM_Plex_Serif",
+          fontSize: "18px",
+        }}
+      >
+        Saved listings
+      </Divider>
+      <div style={{ display: "flex", marginLeft: "-8px", textAlign: "center" }}>
+        {FavouriteListings.slice(0, 3).map((listing) => (
+          <Carousel
+            style={{
+              width: "350px",
+              padding: "5px",
+              overflow: "scroll",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+              <img
+                className="d-block w-150"
+                src={listing.images[0]}
+                alt="First slide"
+                style={{ width: "500px", height: "200px" }}
+              />
+              <Carousel.Caption>
+                <p>{listing.title}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item activeIndex={indexC2} onSelect={handleSelect}>
+              <img
+                className="d-block w-100"
+                src={listing.images[1]}
+                alt="Second slide"
+                style={{ width: "500px", height: "200px" }}
+              />
 
-            <Carousel.Caption>
-              <p>£{listing.monthly_price}</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item activeIndex={indexC3} onSelect={handleSelect}>
-            <img
-              className="d-block w-100"
-              src={listing.images[2]}
-              alt="Third slide"
-              style={{ width: "500px", height: "200px" }}
-            />
+              <Carousel.Caption>
+                <p>£{listing.monthly_price}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item activeIndex={indexC3} onSelect={handleSelect}>
+              <img
+                className="d-block w-100"
+                src={listing.images[2]}
+                alt="Third slide"
+                style={{ width: "500px", height: "200px" }}
+              />
 
-            <Carousel.Caption>
-              <p>{listing.address.postcode}</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-        </Carousel>
-      ))}
+              <Carousel.Caption>
+                {/* <p>{listing.address.postcode}</p> */}
+              </Carousel.Caption>
+            </Carousel.Item>
+          </Carousel>
+        ))}
+      </div>
     </div>
   );
 };

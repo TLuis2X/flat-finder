@@ -1,21 +1,21 @@
 .flexContainer {
-   display: flex;
-   justify-content: center;
-   gap: 1rem;
-
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .outerContainer {
-   display: flex;
-   flex-direction: column;
-   gap: 0.9rem;
-   padding: 1rem;
-   background-color: white;
-   border-radius: 10px;
-   align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: -1rem;
+  background-color: white;
+  border-radius: 10px;
+  align-items: center;
+  width: 15em;
 }
 
-.column {
-   height: fit-content;
-   width: fit-content;
-}
+/* .column {
+  height: fit-content;
+  width: fit-content;
+} */

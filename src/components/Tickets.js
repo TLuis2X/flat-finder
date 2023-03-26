@@ -2,10 +2,22 @@ import React from "react";
 import Lottie from "@amelix/react-lottie";
 import { successOptions } from "@/utils";
 import { Card } from "antd";
-import { Modal } from "antd";
-import { Button, Col, Form, Input, Row, Badge, Space, Tag, message} from "antd";
+import { Popconfirm } from "antd";
+import { Modal, Divider } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Badge,
+  Space,
+  Tag,
+  message,
+} from "antd";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
+
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -13,6 +25,7 @@ import {
   ExclamationCircleOutlined,
   MinusCircleOutlined,
   SyncOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 
 function TicketsComponent({ user_id, setTickets, tickets }) {
@@ -52,8 +65,8 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
     } else {
       setConfirmLoading(false);
       messageApi.open({
-        type: 'error',
-        content: 'Please fill in both title and description',
+        type: "error",
+        content: "Please fill in both title and description",
       });
     }
   };
@@ -73,29 +86,76 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
         <br />
       </div>
       <br />
-      <h1
+      <Divider
+        orientation="middle"
         style={{
-          textAlign: "left",
+          // textAlign: "left",
           fontFamily: "IBM_Plex_Serif",
           fontSize: "18px",
+          // paddingRight: "-300px",
         }}
       >
-        Your tickets:{" "}
-      </h1>
-      <Row style={{ overflow: "auto" }}>
+        My tickets
+      </Divider>
+      <Row>
         {tickets.map((ticket) => (
           <Card
-            id={ticket.id}
-            title={ticket.title}
-            size="20px"
-            style={{ width: "200px", height: "200px" }}
+            title={
+              <>
+                Status: &nbsp;
+                {ticket.status === "resolved" && (
+                  <Tag icon={<CheckCircleOutlined />} color="success">
+                    resolved
+                  </Tag>
+                )}
+                {ticket.status === "in-progress" && (
+                  <Tag icon={<SyncOutlined spin />} color="processing">
+                    in progress
+                  </Tag>
+                )}
+                {ticket.status === "unresolved" && (
+                  <Tag icon={<CloseCircleOutlined />} color="error">
+                    unresolved
+                  </Tag>
+                )}
+                <Popconfirm
+                  title="Delete ticket"
+                  description="Do you wish to delete this ticket?"
+                  onConfirm={() => removeTicket(ticket.id)}
+                  onCancel={handleCancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button>
+                    <CloseOutlined />
+                  </Button>
+                </Popconfirm>
+              </>
+            }
+            bordered={false}
+            style={{
+              width: 300,
+
+              overflow: "visible",
+              wordWrap: "break-word",
+              marginRight: 50,
+              marginBottom: 10,
+              marginLeft: 35,
+              textAlign: "left",
+            }}
           >
-            <p>{ticket.content}</p>
-            <Button onClick={() => removeTicket(ticket.id)}>
-              Delete ticket
-            </Button>
+            &nbsp;
+            <h3>
+              <strong>Title: </strong>
+              {ticket.title}
+            </h3>
+            <p>
+              <strong>Description: </strong>
+              {ticket.content}
+            </p>
           </Card>
         ))}
+        <br />
       </Row>
       <br />
       <br></br>
@@ -160,32 +220,3 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   );
 }
 export default TicketsComponent;
-
-{
-  /* <Row
-style={{
-  display: "flex",
-}}
->
-{tickets.map((ticket) => (
-  <Badge.Ribbon text={ticket.status}>
-    <Card
-      title={ticket.title}
-      // bordered={false}
-      style={{
-        width: 350,
-        //   height: 150,
-        //   margin: 20,
-        margin: 10,
-      }}
-    >
-      {/* <p>{ticket.title}</p> 
-      <p>{ticket.content}</p>
-      <Button onClick={() => removeTicket(ticket.id)}>
-        Delete ticket
-      </Button>
-    </Card>
-  </Badge.Ribbon>
-))}
-</Row> */
-}

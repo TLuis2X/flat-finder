@@ -130,7 +130,9 @@ function AddListingComponent({ listing, setListing }) {
 
   return (
     <div>
-      <Modal open={isModalOpen} style={{ width: 500 }} footer={[<div></div>]}>
+      <Modal open={isModalOpen} style={{ width: 500 }} footer={[<div></div>]}
+        closable={false} maskClosable={false} /* keyboard={false} - close on esc press */
+      >
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 300, gap: '1rem'}}>
           <Progress
           type="circle"
