@@ -57,5 +57,13 @@ export default class UserService {
     const { error } = await supabase.auth.signOut();
   }
 
-  async updateAvatar(url, profile_id) { }
+  async updateAvatar(supabase, url, profile_id) {
+    const response = await supabase
+    .from("profile")
+    .update({ avatar_url: url})
+    .eq("id", String(profile_id)); 
+
+    console.log('Response: ', response)
+  }
+
 }

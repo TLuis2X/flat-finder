@@ -9,10 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amelix/react-lottie": "^1.2.4",
     "@ant-design/icons": "^5.0.1",
     "@chakra-ui/react": "^2.5.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@googlemaps/google-maps-services-js": "^3.3.27",
+    "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^0.9.257",
     "@supabase/auth-helpers-nextjs": "^0.5.6",
@@ -26,10 +29,12 @@
     "mdb-react-ui-kit": "^5.1.0",
     "moment": "^2.29.4",
     "next": "13.2.4",
+    "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "18.2.0",
-    "react-router-dom": "^6.8.2"
+    "react-router-dom": "^6.8.2",
+    "typewriter-effect": "^2.19.0"
   },
   "devDependencies": {
     "css-loader": "^6.7.3",

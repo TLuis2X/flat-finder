@@ -2,6 +2,7 @@
    display: flex;
    justify-content: center;
    gap: 1rem;
+
 }
 
 .outerContainer {
@@ -11,4 +12,10 @@
    padding: 1rem;
    background-color: white;
    border-radius: 10px;
+   align-items: center;
+}
+
+.column {
+   height: fit-content;
+   width: fit-content;
 }

@@ -10,10 +10,9 @@ import Login from "@/components/login";
 import Register from "@/components/register";
 import Image from "next/image";
 import FlatifyDashboard from "./dashboard";
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { notification } from 'antd'
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { notification } from "antd";
 import UserService from "@/services/UserService";
-
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -51,7 +50,7 @@ export default function Home() {
     <div className="main-div">
       {popUp}
       {session ? (
-        <FlatifyDashboard/>
+        <FlatifyDashboard />
       ) : (
         <Container className="main-container">
           <Row>

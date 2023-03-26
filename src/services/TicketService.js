@@ -2,11 +2,11 @@ import { Ticket } from "@/models/Ticket";
 
 export default class TicketService{
 
-    url = 'http://127.0.0.1:3001'
-
+    url = 'https://flat-finder-server.onrender.com'
+    // url = "http://127.0.0.1:3001"
     constructor() {}
 
-    async addTicket(title, content){
+    async addTicket(title, content, user_id){
         const response = await fetch(`${this.url}/ticket`, {
             method: "POST",
             headers: {
@@ -14,14 +14,14 @@ export default class TicketService{
             },
             body: JSON.stringify({
                 title, 
-                content
+                content,
+                creator: user_id
             })
         })
-        if (response.ok) {
-            const result = await response.json()
-            return result
-          }
-          return response
+        const result = await response.json()
+        console.log("Response from ticket service: ", result)
+        return new Ticket(result.data[0])
+        
     }
 
     async removeTicket(ticketID){
@@ -42,12 +42,12 @@ export default class TicketService{
         return response
     }
 
-    async getUserTicket(){
-        const response = await fetch(`${this.url}/ticket`)
+    async getUserTicket(user_id){
+        const response = await fetch(`${this.url}/ticket?user_id=${user_id}`)
 
         if(response.ok){
             const ticket = await response.json()
-            return ticket
+            return ticket.data
         }
 
         return response
