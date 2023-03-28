@@ -2,7 +2,8 @@ import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
-import FavListings from "@/components/FavListings";
+import FavListings from "@/components/FavListings"
+import FavouriteListing from "@/components/favouritelisting";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
@@ -162,7 +163,9 @@ function FlatifyDashboard() {
               }}
             >
               <div>
-                <FavListings favListings={favListings} />
+                <FavouriteListing listing={ listings[0] }/>
+                <FavouriteListing listing={ listings[0] }/>
+                <FavouriteListing listing={ listings[0] }/>
               </div>
               <div
                 style={{

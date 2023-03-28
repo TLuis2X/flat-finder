@@ -30,16 +30,15 @@ function FavouriteListing(props) {
 
         <CardBody>
           <Image
-            src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-            alt='Green double couch with wooden legs'
+            src={listing?.images[0]}
             borderRadius='lg'
           />
           
           <Stack mt='6' spacing='3'>
-            <Heading size='md'>Double Room for rent</Heading>
-            <Heading size='sm'>London, England</Heading>
+            <Heading size='md'>{listing?.title}</Heading>
+            <Heading size='sm'>{listing?.address.city}, {listing?.address.country}</Heading>
             <Text color='blue.600' fontSize='2xl'>
-              £450pcm
+              £{listing?.monthly_price}pcm
             </Text>
           </Stack>
           

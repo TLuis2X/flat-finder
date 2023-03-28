@@ -25,6 +25,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { items } from "@/utils";
+
 const FavListings = (props) => {
   const FavouriteListings = props.favListings.map((item) => item.listing);
   const [dotPosition, setDotPosition] = useState("left");
@@ -47,6 +48,7 @@ const FavListings = (props) => {
       >
         Saved listings
       </Divider>
+
       <div style={{ display: "flex", marginLeft: "-8px", textAlign: "center" }}>
         {FavouriteListings.slice(0, 3).map((listing) => (
           <Carousel
@@ -68,6 +70,7 @@ const FavListings = (props) => {
                 <p>{listing.title}</p>
               </Carousel.Caption>
             </Carousel.Item>
+
             <Carousel.Item activeIndex={indexC2} onSelect={handleSelect}>
               <img
                 className="d-block w-100"
@@ -80,6 +83,7 @@ const FavListings = (props) => {
                 <p>£{listing.monthly_price}</p>
               </Carousel.Caption>
             </Carousel.Item>
+
             <Carousel.Item activeIndex={indexC3} onSelect={handleSelect}>
               <img
                 className="d-block w-100"
@@ -92,6 +96,7 @@ const FavListings = (props) => {
                 {/* <p>{listing.address.postcode}</p> */}
               </Carousel.Caption>
             </Carousel.Item>
+
           </Carousel>
         ))}
       </div>
