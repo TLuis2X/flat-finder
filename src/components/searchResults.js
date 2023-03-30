@@ -22,16 +22,17 @@ import {
   Text,
   Collapse,
 } from "@chakra-ui/react";
-import { Pagination } from "antd";
+import { Empty, Pagination } from "antd";
 import FavListingService from "@/services/FavListingService";
 const SearchResultPage = (props) => {
   //TODO: find a way to check which listings are already favorited by the user logged in...
 
   const favIds = props.favListings.map((item) => item.listing.id);
   const [selectedListing, setSelectedListing] = useState(null);
-  const { listings, setFavListings, user_id } = props;
+  const { listings, setFavListings, user_id, forum } = props;
   const [sliceIndex, setSliceIndex] = useState(3);
-
+  
+  const searchedListings = listings.filter((listing) => listing.address.city == props.searchValue)
   const displayListings = listings.map((listing) => listing);
   const favListingSevice = new FavListingService();
 
@@ -65,6 +66,7 @@ const SearchResultPage = (props) => {
         <ListingInfo
           listing={selectedListing}
           setSelectedListing={setSelectedListing}
+          userId={user_id}
         />
       ) : (
         <div
@@ -84,7 +86,8 @@ const SearchResultPage = (props) => {
               marginBottom: "5rem",
             }}
           >
-            {displayListings
+            {!props.searchValue ? <Empty description={<p style={{color: 'gray'}}>Search for something :D</p>} /> : !searchedListings.length ? <Empty description={<p style={{color: 'gray'}}>No listings in {props.searchValue}</p>} /> :
+             searchedListings
               .slice(sliceIndex - 3, sliceIndex)
               .map((listing) => (
                 <Card
@@ -175,13 +178,13 @@ const SearchResultPage = (props) => {
               bottom: "5.5rem",
             }}
             defaultCurrent={1}
+            current={sliceIndex/3}
             defaultPageSize={3}
             total={displayListings.length}
             onChange={handlePagination}
           />
         </div>
       )}
-      )
     </>
   );
 };

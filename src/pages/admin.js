@@ -36,7 +36,7 @@ const items = [
   getItem("Delete listings", "2", <SearchOutlined />),
   getItem("Delete forum post", "3", <AppstoreAddOutlined />),
   getItem("Tickets", "4", <InboxOutlined />),
-  getItem("Logout", "5", <LogoutOutlined/>),
+  getItem("Logout", "5", <LogoutOutlined />),
 ];
 
 const FlatifyDashboard = () => {
@@ -166,14 +166,14 @@ const FlatifyDashboard = () => {
               <div>
                 <RecentListingsComponent />
               </div>
-              <div
+              {/* <div
                 style={{
                   margin: 60,
                   textAlign: "center",
                 }}
               >
                 <TicketsComponent />
-              </div>
+              </div> */}
             </div>
           )}
           {tabKey == "2" && <AdminResultPage />}
@@ -198,7 +198,7 @@ const FlatifyDashboard = () => {
         }}
       >
         <Space size={26} wrap>
-          <RightDashboard user={user}/>
+          <RightDashboard user={user} />
         </Space>
       </Sider>
     </Layout>

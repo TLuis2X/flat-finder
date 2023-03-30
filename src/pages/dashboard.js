@@ -9,7 +9,6 @@ import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
@@ -18,19 +17,23 @@ import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
-import Map from "@/components/Map";
 import OwnListings from "@/components/OwnListings";
+import ForumPost from "@/components/ForumPost";
+import ConsultantHomePage from "@/components/ConsultantHomePage";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
-  const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+
+  const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [ownListings, setOwnListings] = useState([])
+  const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [searchValue, setSearchValue] = useState('')
+
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
 
@@ -57,18 +60,21 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets] = await Promise.all([
-        favListingSevice.getFavListing(user_profile.id),
-        listingService.getOwnListing(user_profile.id),
-        ticketService.getUserTicket(user_profile.id),
-      ]);
+      const [new_favListings, new_ownListings, new_tickets] = await Promise.all(
+        [
+          favListingSevice.getFavListing(user_profile.id),
+          listingService.getOwnListing(user_profile.id),
+          ticketService.getUserTicket(user_profile.id),
+        ]
+      );
       setFavListings(new_favListings);
-      setOwnListings(new_ownListings)
+      setOwnListings(new_ownListings);
       setTickets(new_tickets);
     })();
   }, []);
 
   const handleSearch = (value) => {
+    console.log(value)
     let res = [];
     if (!value) {
       res = [];
@@ -83,11 +89,12 @@ function FlatifyDashboard() {
     }
     setOptions(res);
   };
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
-  const addListingRef = useRef();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
+
+
 
   return (
     <Layout
@@ -115,6 +122,7 @@ function FlatifyDashboard() {
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
+          selectedKeys={[String(tabKey)]}
           mode="inline"
           items={items}
           onClick={({ key }) => {
@@ -140,6 +148,10 @@ function FlatifyDashboard() {
         >
           <AutoComplete
             style={{ width: 800 }}
+            onSelect={(value) => {
+              setSearchValue(value.split(',')[0])
+              setTabKey(2)
+            }}
             onSearch={handleSearch}
             placeholder="Search by city"
             options={options}
@@ -160,42 +172,23 @@ function FlatifyDashboard() {
             <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
           </Breadcrumb>
           {tabKey == "1" && (
-            <div
-              className="card"
-              style={{
-                padding: 24,
-                minHeight: 570,
-                background: colorBgContainer,
-              }}
-            >
-              <div>
-                <FavouriteListing listing={ listings[0] }/>
-              </div>
-
-              <div>
-                <OwnListings ownListings={ownListings} />
-              </div>
-
-              {/* <div>
-                <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
-              </div> */}
-              <div
-                style={{
-                  margin: 60,
-                  textAlign: "center",
-                }}
-              >
-                <TicketsComponent
-                  user_id={user.id}
-                  setTickets={setTickets}
-                  tickets={tickets}
-                />
-              </div>
-            </div>
+            <ConsultantHomePage
+              favListings={favListings}
+              ownListings={ownListings}
+              user_id={user.id}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
           )}
-          {tabKey == "2" && <SearchResultPage listings={listings} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
+  
+
+          {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
           {tabKey == "3" && (
-            <AddListingComponent listing={listing} setListing={setListing} setOwnListings={setOwnListings} />
+            <AddListingComponent
+              listing={listing}
+              setListing={setListing}
+              setOwnListings={setOwnListings}
+            />
           )}
         </Content>
         <Footer
