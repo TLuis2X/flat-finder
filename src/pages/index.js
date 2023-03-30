@@ -13,6 +13,9 @@ import FlatifyDashboard from "./dashboard";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { notification } from "antd";
 import UserService from "@/services/UserService";
+import { LoadScript } from "@react-google-maps/api";
+import Loading from '../components/Loading'
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -50,7 +53,9 @@ export default function Home() {
     <div className="main-div">
       {popUp}
       {session ? (
-        <FlatifyDashboard />
+         <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} loadingElement={<Loading/>}>
+           <FlatifyDashboard />
+         </LoadScript>
       ) : (
         <Container className="main-container">
           <Row>

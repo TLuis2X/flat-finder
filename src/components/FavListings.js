@@ -2,6 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import { Empty } from 'antd'
 const contentStyle = {
   height: "160px",
   //   width: "160px",
@@ -48,55 +49,34 @@ const FavListings = (props) => {
       >
         Saved listings
       </Divider>
-
-      <div style={{ display: "flex", marginLeft: "-8px", textAlign: "center" }}>
-        {FavouriteListings.slice(0, 3).map((listing) => (
+      <div style={{ display: "flex", marginLeft: "-8px", textAlign: "center", justifyContent: 'center' }}>
+        {!FavouriteListings.length ?
+          <Empty description={<p style={{color: 'gray'}}>Saved listings will show here</p>} /> :
+        FavouriteListings.slice(0, 3).map((listing) => (
           <Carousel
-            style={{
-              width: "350px",
+          style={{
+            width: "350px",
               padding: "5px",
               overflow: "scroll",
               whiteSpace: "nowrap",
             }}
           >
-            <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+           {listing.images.map((image, index) => (
+              <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
               <img
                 className="d-block w-150"
-                src={listing.images[0]}
-                alt="First slide"
+                src={image}
+                alt="Carousel Slide"
                 style={{ width: "500px", height: "200px" }}
               />
               <Carousel.Caption>
-                <p>{listing.title}</p>
+              {index == 0 &&
+                <p>{listing.title}</p>}
+              { index == 1 && 
+               <p>{listing.monthly_price}</p>}
               </Carousel.Caption>
             </Carousel.Item>
-
-            <Carousel.Item activeIndex={indexC2} onSelect={handleSelect}>
-              <img
-                className="d-block w-100"
-                src={listing.images[1]}
-                alt="Second slide"
-                style={{ width: "500px", height: "200px" }}
-              />
-
-              <Carousel.Caption>
-                <p>£{listing.monthly_price}</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-
-            <Carousel.Item activeIndex={indexC3} onSelect={handleSelect}>
-              <img
-                className="d-block w-100"
-                src={listing.images[2]}
-                alt="Third slide"
-                style={{ width: "500px", height: "200px" }}
-              />
-
-              <Carousel.Caption>
-                {/* <p>{listing.address.postcode}</p> */}
-              </Carousel.Caption>
-            </Carousel.Item>
-
+            ))} 
           </Carousel>
         ))}
       </div>

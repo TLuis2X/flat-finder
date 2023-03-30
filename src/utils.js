@@ -1,5 +1,6 @@
 import { Form, Select } from "antd";
 import successData from './data/successfully-done.json'
+import laodingData from './data/square-loading.json'
 import {
   SearchOutlined,
   AppstoreAddOutlined,
@@ -52,6 +53,15 @@ const successOptions = {
   }
 };
 
+const loadingOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: laodingData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  } 
+}
+
 const emptyListing = {
   title: '',
   description: '',
@@ -102,4 +112,4 @@ const getBase64 = (img, callback) => {
   reader.readAsDataURL(img);
 };
 
-export { items, suffixSelector, successOptions, emptyListing, beforeUpload, getBase64 } 
+export { items, suffixSelector, successOptions, loadingOptions, emptyListing, beforeUpload, getBase64 } 

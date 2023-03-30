@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "@/styles/favouritelisting.module.css";
-import { Card, CardBody, Image, Stack, Heading, Text, Button, CardFooter, ChakraBaseProvider, ChakraProvider } from '@chakra-ui/react'
+import { ButtonGroup, Flex, Card, CardBody, Image, Stack, Heading, Text, Button, CardFooter, ChakraBaseProvider, ChakraProvider } from '@chakra-ui/react'
 import { HeartFilled } from "@ant-design/icons";
 //import { Carousel } from 'antd';
 
@@ -41,8 +41,8 @@ function FavouriteListing(props) {
               £{listing?.monthly_price}pcm
             </Text>
           </Stack>
-          
-          <Button colorScheme='red'>
+
+          <Button colorScheme='red' left='300px'>
             <HeartFilled />
           </Button>
         </CardBody>

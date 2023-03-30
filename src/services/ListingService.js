@@ -9,7 +9,7 @@ export default class ListingService {
    * @returns {Promise<Listing[]>} an array of Listing objects
    */
   async getListings() {
-    const response = await fetch(`${this.url}/listing`)
+    const response = await fetch(`${this.url}/listings`)
     
     if (response.ok){
       const listings = await response.json()
@@ -35,6 +35,19 @@ export default class ListingService {
       const result = await response.json()
       return result
     }
+    return response
+  }
+
+  //added user_id parameter
+  async getOwnListing(user_id){
+    //added user_id as url parameter because its a get request
+    const response = await fetch(`${this.url}/listing?user_id=${user_id}`)
+
+    if(response.ok){
+      const listing = await response.json()
+      return listing.data
+    }
+
     return response
   }
 }

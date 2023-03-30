@@ -24,10 +24,6 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const {Title, Text} = Typography
 
-
-
-
-
 const getBase64Url = (file) =>
 new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -39,7 +35,7 @@ new Promise((resolve, reject) => {
 const SITE_KEY_HCAPTCHA = "63ab0739-ef17-4588-96f7-9d7d30fe3c68"
 
 
-function AddListingComponent({ listing, setListing }) {
+function AddListingComponent({ listing, setListing, setOwnListings}) {
   
   const supabase = useSupabaseClient();
   const googleMapsService = new GoogleMapsService()
@@ -87,6 +83,7 @@ function AddListingComponent({ listing, setListing }) {
     //Add the listing
     const response = await listingService.addListing(listing);
     console.log('Here is the response: ', response)
+    setOwnListings((prev) => prev.concat(response.data))
     setPercent(100)
     setTimeout(() =>{
       setIsModalOpen(false)
@@ -129,7 +126,7 @@ function AddListingComponent({ listing, setListing }) {
   
 
   return (
-    <div>
+    <div className="card" style={{padding: '2.5rem'}}>
       <Modal open={isModalOpen} style={{ width: 500 }} footer={[<div></div>]}
         closable={false} maskClosable={false} /* keyboard={false} - close on esc press */
       >
@@ -156,7 +153,7 @@ function AddListingComponent({ listing, setListing }) {
           </p> */}
         </div>
       </Modal>
-      <Form
+      <Form 
         labelCol={{span: 5}}
         wrapperCol={{span: 10}}
         layout="horizontal"

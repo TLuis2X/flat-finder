@@ -14,6 +14,7 @@ import {
   Space,
   Tag,
   message,
+  Empty
 } from "antd";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
@@ -26,6 +27,9 @@ import {
   MinusCircleOutlined,
   SyncOutlined,
   CloseOutlined,
+  DeleteFilled,
+  DeleteOutlined,
+  DeleteTwoTone
 } from "@ant-design/icons";
 
 function TicketsComponent({ user_id, setTickets, tickets }) {
@@ -79,13 +83,6 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   return (
     <>
       {alert}
-      <div>
-        <Button type="primary" onClick={showModal}>
-          Add ticket
-        </Button>
-        <br />
-      </div>
-      <br />
       <Divider
         orientation="middle"
         style={{
@@ -97,11 +94,14 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
       >
         My tickets
       </Divider>
-      <Row>
-        {tickets.map((ticket) => (
+      <Row style={{ display: "flex", marginLeft: "-8px", textAlign: "center", justifyContent: 'center' }}>
+        { !tickets.length ? 
+        <Empty description={<p style={{color: 'gray'}}>Ticket history will show here</p>} /> :
+        tickets.map((ticket) => (
           <Card
+            className="card hover-bg"
             title={
-              <>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: "space-between"}}>
                 Status: &nbsp;
                 {ticket.status === "resolved" && (
                   <Tag icon={<CheckCircleOutlined />} color="success">
@@ -114,8 +114,8 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                   </Tag>
                 )}
                 {ticket.status === "unresolved" && (
-                  <Tag icon={<CloseCircleOutlined />} color="error">
-                    unresolved
+                  <Tag  style={{display: 'flex', alignItems: 'center', gap: '0.3rem'}} color="error">
+                    <CloseCircleOutlined />unresolved
                   </Tag>
                 )}
                 <Popconfirm
@@ -126,11 +126,11 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                   okText="Yes"
                   cancelText="No"
                 >
-                  <Button>
-                    <CloseOutlined />
-                  </Button>
+                  {/* <Button> */}
+                  <DeleteTwoTone />
+                  {/* </Button> */}
                 </Popconfirm>
-              </>
+              </div>
             }
             bordered={false}
             style={{
@@ -155,8 +155,15 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
             </p>
           </Card>
         ))}
-        <br />
+        
       </Row>
+      <br />
+        <div>
+          <Button type="primary" onClick={showModal}>
+            Add ticket
+          </Button>
+          <br />
+        </div>
       <br />
       <br></br>
 

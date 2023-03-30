@@ -1,4 +1,4 @@
-.main-div {
+/* .main-div {
   padding: 0;
   margin: 0;
   width: max-content;
@@ -7,4 +7,89 @@
   margin-left: 3em;
   margin-top: 2em;
 }
+ */
 
+
+
+.hover-up,
+.hover-bg,
+.hover-scale {
+  transition: all 0.3s ease;
+}
+
+.hover-bg:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hover-up:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+
+.hover-scale:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+
+.card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: card-entrance 0.6s forwards ease-out;
+  /* border: 1px solid rgba(0, 0, 0, 0.175) !important; */
+  /* border: 1px solid rgba(173, 173, 173, 0.1); */
+}
+
+.custom-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: rgb(35, 87, 220);
+}
+
+.spin-animation {
+  animation: spin 0.5s linear;
+}
+
+.spin-animation-rev {
+  animation: spin-rev 0.5s linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    /* transform: scale(1); */
+  }
+
+  100% {
+    /* transform: scale(1); */
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes spin-rev {
+  0% {
+    transform: rotate(0deg);
+    /* transform: scale(1); */
+  }
+
+  100% {
+    /* transform: scale(1); */
+    transform: rotate(-180deg);
+  }
+}
+
+
+@keyframes card-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(0);
+  }
+}
