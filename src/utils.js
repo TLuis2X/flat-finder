@@ -1,12 +1,14 @@
 import { Form, Select } from "antd";
-import successData from './data/successfully-done.json'
-import laodingData from './data/square-loading.json'
+import successData from "./data/successfully-done.json";
+import laodingData from "./data/square-loading.json";
+import contentModeration from "./data/content-moderation.json";
 import {
   SearchOutlined,
   AppstoreAddOutlined,
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
+  GlobalOutlined
 } from "@ant-design/icons";
 
 function getItem(label, key, icon, children) {
@@ -18,15 +20,14 @@ function getItem(label, key, icon, children) {
   };
 }
 
-
 const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Search", "2", <SearchOutlined />),
-  getItem("Add listings", "3", <AppstoreAddOutlined />),
-  getItem("Inbox", "4", <InboxOutlined />),
-  getItem("Logout", "5", <LogoutOutlined />),
+  getItem('Global View', "3", <GlobalOutlined />),
+  getItem("Add listings", "4", <AppstoreAddOutlined />),
+  getItem("Inbox", "5", <InboxOutlined />),
+  getItem("Logout", "6", <LogoutOutlined />),
 ];
-
 
 const { Option } = Select;
 const suffixSelector = (
@@ -49,8 +50,17 @@ const successOptions = {
   autoplay: true,
   animationData: successData,
   rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice"
-  }
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const moderationOption = {
+  loop: true,
+  autoplay: true,
+  animationData: contentModeration,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
 };
 
 const loadingOptions = {
@@ -58,13 +68,13 @@ const loadingOptions = {
   autoplay: true,
   animationData: laodingData,
   rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice"
-  } 
-}
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 const emptyListing = {
-  title: '',
-  description: '',
+  title: "",
+  description: "",
   images: [],
   owner: null,
   monthly_price: 0,
@@ -75,7 +85,7 @@ const emptyListing = {
     postcode: "",
     city: "",
     country: "",
-  }, 
+  },
   contract_length: 0,
   coordinates: {
     latitude: "",
@@ -90,9 +100,8 @@ const emptyListing = {
     station_nearby: false,
     gym_nearby: false,
   },
-  temp_fileList: [] //NOTE: this is NOT a column in the listing table in db. This is used in the addListing component to mantain state of pictures uploaded. 
-}
-
+  temp_fileList: [], //NOTE: this is NOT a column in the listing table in db. This is used in the addListing component to mantain state of pictures uploaded.
+};
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -112,4 +121,13 @@ const getBase64 = (img, callback) => {
   reader.readAsDataURL(img);
 };
 
-export { items, suffixSelector, successOptions, loadingOptions, emptyListing, beforeUpload, getBase64 } 
+export {
+  items,
+  suffixSelector,
+  successOptions,
+  loadingOptions,
+  emptyListing,
+  moderationOption,
+  beforeUpload,
+  getBase64,
+};

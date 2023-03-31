@@ -28,9 +28,8 @@ import {
 } from "@chakra-ui/react";
 import { items } from "@/utils";
 
-const FavListings = (props) => {
-  const FavouriteListings = props.favListings.map((item) => item.listing);
-  const setSelectedListing = props.setSelectedListing;
+const FavListings = ({favListings, setSelectedListing}) => {
+  const FavouriteListings =  favListings && favListings.map((item) => item.listing);
   // const [selectedListing, setSelectedListing] = useState(null);
   const [dotPosition, setDotPosition] = useState("left");
   const [indexC1, setIndexC1] = useState(0);
@@ -60,14 +59,14 @@ const FavListings = (props) => {
           justifyContent: "center",
         }}
       >
-        {!FavouriteListings.length ? (
+        {FavouriteListings && !FavouriteListings.length ? (
           <Empty
             description={
               <p style={{ color: "gray" }}>Saved listings will show here</p>
             }
           />
         ) : (
-          FavouriteListings.slice(0, 3).map((listing) => (
+         FavouriteListings && FavouriteListings.slice(0, 3).map((listing) => (
             <Carousel
               style={{
                 width: "350px",
@@ -77,20 +76,21 @@ const FavListings = (props) => {
               }}
               onClick={() => setSelectedListing(listing)}
             >
-              {listing && listing.images.map((image, index) => (
-                <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
-                  <img
-                    className="d-block w-150"
-                    src={image}
-                    alt="Carousel Slide"
-                    style={{ width: "500px", height: "200px" }}
-                  />
-                  <Carousel.Caption>
-                    {index == 0 && <p>{listing.title}</p>}
-                    {index == 1 && <p>{listing.monthly_price}</p>}
-                  </Carousel.Caption>
-                </Carousel.Item>
-              ))}
+              {listing &&
+                listing.images.map((image, index) => (
+                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+                    <img
+                      className="d-block w-150"
+                      src={image}
+                      alt="Carousel Slide"
+                      style={{ width: "500px", height: "200px" }}
+                    />
+                    <Carousel.Caption>
+                      {index == 0 && <p>{listing.title}</p>}
+                      {index == 1 && <p>{listing.monthly_price}</p>}
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                ))}
             </Carousel>
           ))
         )}

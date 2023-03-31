@@ -18,7 +18,7 @@
   border-radius: 5px;
   background-color: orange;
   color: black;
-  padding: 0.3rem
+  padding: 0.3rem;
 }
 
 .hover-up,
@@ -37,12 +37,10 @@
   transform: translateY(-4px);
 }
 
-
 .hover-scale:hover {
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   transform: scale(1.05);
 }
-
 
 .card {
   opacity: 0;
@@ -89,7 +87,6 @@
     transform: rotate(-180deg);
   }
 }
-
 
 @keyframes card-entrance {
   0% {

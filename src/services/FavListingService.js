@@ -7,6 +7,7 @@ export default class FavListingService {
 
         if (response.ok) {
             const listings = await response.json()
+            console.log("FavListings in service:", listings) 
             return listings.data
         }
         return response

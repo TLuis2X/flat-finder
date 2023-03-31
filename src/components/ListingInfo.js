@@ -5,7 +5,16 @@ import { faCar } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
 import { faSmoking } from "@fortawesome/free-solid-svg-icons";
-import { Button, Form, Row, Col, Input, Image, Descriptions, Carousel, } from "antd";
+import {
+  Button,
+  Form,
+  Row,
+  Col,
+  Input,
+  Image,
+  Descriptions,
+  Carousel,
+} from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 
 import Map from "../components/Map.js";
@@ -17,7 +26,7 @@ import AdOwnerCard from "./AdOwnerCard.js";
 const ListingInfo = ({ listing, setSelectedListing, userId }) => {
   const [content, setContent] = useState("");
   const [forumPosts, setForumPosts] = useState([]);
-  const { owner } = listing
+  const { owner } = listing;
 
   const forumPostService = new ForumPostService();
 
@@ -49,28 +58,44 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
     <>
       <Button onClick={() => setSelectedListing(false)}>
         <FontAwesomeIcon icon={faArrowLeft} />
-      </Button>
+      </Button>{" "}
       <br></br>
-      <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
-
+      <div style={{ display: "flex" }}>
+        <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
+        <p>
+          Listing id:
+          {listing.id}
+        </p>
+      </div>
       <Descriptions.Item>
-      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Carousel
             autoplay
             style={{
               width: 500,
               height: 300,
-              overflow: 'hidden',
+              overflow: "hidden",
               textAlign: "center",
               alignContent: "center",
               marginLeft: "90px",
               display: "relative",
             }}
-            >
-            {listing.images.map(src => <Image src={src} /* style={{backgroundSize: 'cover', backgroundImage: `url(${src})`}} */ /* preview={false} *//>)} 
-
+          >
+            {listing.images.map((src) => (
+              <Image
+                src={
+                  src
+                } /* style={{backgroundSize: 'cover', backgroundImage: `url(${src})`}} */ /* preview={false} */
+              />
+            ))}
           </Carousel>
-          <AdOwnerCard owner={owner} user_id={userId}/>
+          <AdOwnerCard owner={owner} user_id={userId} />
         </div>
         <br />
         <h3 style={{ fontFamily: "IBM_Plex_Serif" }}>Extra information</h3>
@@ -121,12 +146,12 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
           )}
         </Descriptions.Item>
         <Descriptions.Item label="Description">
-          {listing.description}
+          {listing.description} Listing id: {listing.id}
         </Descriptions.Item>
       </Descriptions>
       <Descriptions>
         <Descriptions.Item label="View it on a map">
-          <Map coordinates={listing.coordinates} />
+          <Map coordinates={[listing.coordinates]} />
         </Descriptions.Item>
       </Descriptions>
       <div>

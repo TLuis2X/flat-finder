@@ -20,6 +20,7 @@ import { items, emptyListing } from "@/utils";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
+import GlobalView from "@/components/GlobalView";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -32,7 +33,7 @@ function FlatifyDashboard() {
   const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
@@ -67,14 +68,16 @@ function FlatifyDashboard() {
           ticketService.getUserTicket(user_profile.id),
         ]
       );
+      console.log({ new_favListings });
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
+      console.log({ favListings });
     })();
   }, []);
 
   const handleSearch = (value) => {
-    console.log(value)
+    console.log(value);
     let res = [];
     if (!value) {
       res = [];
@@ -93,8 +96,6 @@ function FlatifyDashboard() {
   // const {
   //   token: { colorBgContainer },
   // } = theme.useToken();
-
-
 
   return (
     <Layout
@@ -126,7 +127,7 @@ function FlatifyDashboard() {
           mode="inline"
           items={items}
           onClick={({ key }) => {
-            if (key === "5") {
+            if (key === "6") {
               handleLogout();
             } else {
               setTabKey(key);
@@ -149,8 +150,8 @@ function FlatifyDashboard() {
           <AutoComplete
             style={{ width: 800 }}
             onSelect={(value) => {
-              setSearchValue(value.split(',')[0])
-              setTabKey(2)
+              setSearchValue(value.split(",")[0]);
+              setTabKey(2);
             }}
             onSearch={handleSearch}
             placeholder="Search by city"
@@ -180,16 +181,27 @@ function FlatifyDashboard() {
               tickets={tickets}
             />
           )}
-  
 
-          {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
-          {tabKey == "3" && (
+          {tabKey == "2" && (
+            <SearchResultPage
+              listings={listings}
+              searchValue={searchValue}
+              user_id={user.id}
+              setFavListings={setFavListings}
+              favListings={favListings}
+            />
+          )}
+          {tabKey == "3" && <GlobalView listings={listings} />}
+          {tabKey == "4" && (
             <AddListingComponent
               listing={listing}
               setListing={setListing}
               setOwnListings={setOwnListings}
+              listings={listings}
+              setListings={setListings}
             />
           )}
+          {tabKey == "5" && <div>Inbox</div>}
         </Content>
         <Footer
           style={{
