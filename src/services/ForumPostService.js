@@ -2,7 +2,7 @@ export default class ForumPostService {
   url = "https://flat-finder-server.onrender.com";
 
   async getForumPosts(forum_id) {
-    const response = await fetch(`${this.url}/forum-post?forum_id=${forum_id}`);
+    const response = await fetch(`${this.url}/forum-posts?forum_id=${forum_id}`);
 
     if (response.ok) {
       const posts = await response.json();
@@ -10,6 +10,18 @@ export default class ForumPostService {
     }
     return response;
   }
+
+  async getPostById(post_id) {
+    const response = await fetch(`${this.url}/forum-post?post_id=${post_id}`);
+
+    if (response.ok) {
+      const post = await response.json();
+      return post;
+    }
+    return response;
+  }
+
+
 
   async addForumPost(user_id, content, forum_id) {
     const response = await fetch(`${this.url}/forum-post`, {

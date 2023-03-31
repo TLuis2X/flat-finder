@@ -21,13 +21,16 @@ import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
+import {notification} from 'antd'
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
+
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  const [api, contextHolder] = notification.useNotification();
 
   const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
@@ -49,6 +52,81 @@ function FlatifyDashboard() {
   async function handleLogout() {
     await userService.logout(supabase);
   }
+  
+  function handleMessageEvent(payload){
+    const new_record = payload.new
+  }
+
+  function handleForumEvent(payload){
+    const new_record = payload.new;
+    console.log({new_record})
+    for (const listing of ownListings){
+      console.log({listing})
+      if (listing.forum == new_record.forum){
+        //get user
+        console.log("Inside if statement of handleForumEvent")
+        alert('You received a comment on one of your listings: ' + new_record.content )
+      }
+    }
+  }
+
+  const openNotification = (placement) => {
+    api.info({
+      message: `Notification ${placement}`,
+      description: <ForumPost />,
+      placement,
+    });
+  };
+  
+  const forumPostChannel = supabase
+    .channel('table-db-changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'forum_post',
+      },
+      (payload) => {
+        console.log(payload)
+        handleForumEvent(payload)
+      }
+    ).subscribe()
+
+    // const messagesChannel = supabase
+    // .channel('table-db-changes')
+    // .on(
+    //   'postgres_changes',
+    //   {
+    //     event: '*',
+    //     schema: 'public',
+    //     table: 'message',
+    //   },
+    //   (payload) => console.log(payload)
+    // ).subscribe()
+
+
+
+  function handleRealtimeEvents(event, data){
+    console.log({event, data})
+  }
+
+  useEffect(() => {
+    // Supabase client setup
+    const channel = supabase
+    .channel('table-db-changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'message',
+      },
+      (payload) => console.log(payload)
+    )
+    .subscribe()
+  }, [supabase]);
+  
 
   useEffect(() => {
     (async () => {
@@ -103,6 +181,7 @@ function FlatifyDashboard() {
         minHeight: "100vh",
       }}
     >
+      {contextHolder}
       <Sider
         collapsible
         collapsed={collapsed}
