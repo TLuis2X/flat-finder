@@ -103,7 +103,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
         <h3 style={{ fontFamily: "IBM_Plex_Serif" }}>Extra information</h3>
         <br />
       </Descriptions.Item>
-      <Descriptions layout="vertical">
+      <Descriptions layout="vertical" style={{"white-space":"pre-line"}}>
         <Descriptions.Item label="Rent">
           £{listing.monthly_price} (pcm)
         </Descriptions.Item>
