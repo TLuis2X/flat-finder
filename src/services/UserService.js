@@ -71,4 +71,14 @@ export default class UserService {
 
     console.log("Response: ", response);
   }
+
+
+  async getUserById(user_id){
+    const user_profile = await supabase
+        .from("profile")
+        .select("*")
+        .eq("user_id", String(user_id));
+    return new User(user_profile.data[0]) 
+  }
+
 }

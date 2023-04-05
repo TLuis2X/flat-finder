@@ -5,6 +5,7 @@ class Ticket {
   title;
   creator;
   status;
+  admin_content;
 
   constructor(ticket) {
     this.id = ticket.id;
@@ -13,6 +14,7 @@ class Ticket {
     this.title = ticket.title;
     this.creator = ticket.creator;
     this.status = ticket.status;
+    this.admin_content = ticket.admin_content;
   }
 }
 

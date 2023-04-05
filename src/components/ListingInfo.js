@@ -23,6 +23,8 @@ import ForumPost from "./ForumPost.js";
 import { Avatar, flexbox } from "@chakra-ui/react";
 import AdOwnerCard from "./AdOwnerCard.js";
 
+const { TextArea } = Input;
+
 const ListingInfo = ({ listing, setSelectedListing, userId }) => {
   const [content, setContent] = useState("");
   const [forumPosts, setForumPosts] = useState([]);
@@ -36,10 +38,10 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
         userId,
         content,
         listing.forum
-      );
-      console.log(postToAdd);
-      setForumPosts((prev) => prev.concat([postToAdd]));
+        );
+        console.log(postToAdd);
       setContent("");
+      setForumPosts((prev) => prev.concat([postToAdd]));
     }
   }
 
@@ -156,33 +158,23 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
       </Descriptions>
       <div>
         {forumPosts.map((forumPost) => (
-          <ForumPost forumPost={forumPost} />
+          <ForumPost key={forumPost.id} forumPost={forumPost} user_id={userId} setForumPosts={setForumPosts}/>
         ))}
-        <Form layout="vertical">
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: "Post message on forum",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="Post message..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                <TextArea
+                style={{width: '80%'}}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                rows={4}
+                placeholder="Post message"
+                maxLength={120}
                 />
-              </Form.Item>
             </Col>
           </Row>
           <Button type="primary" onClick={addPost}>
             Add post
           </Button>
-        </Form>
       </div>
       <div>{/* <ForumPost forumPost={forumPosts[0]} /> */}</div>
     </>

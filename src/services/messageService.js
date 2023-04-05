@@ -1,9 +1,11 @@
+
+//This is a service class for tables: conversation, message
 export default class MessageService {
 
     url = "https://flat-finder-server.onrender.com";
 
     async addMessage(sender_id, content, recipient_id){
-        const data = await fetch(`${this.url}/conversation?user1=${sender_id}&user2=${recipient_id}`)
+        const data = await fetch(`${this.url}/conversation/${sender_id}/${recipient_id}`)
         const conversation = await data.json()
         console.log({conversation})
         const response = await fetch(`${this.url}/message`, {
@@ -23,11 +25,34 @@ export default class MessageService {
         return response
     }
 
-    async getMessage() {
-        const response = await fetch(`${this.url}/message`)
+    async getConversationById(conversation_id){
+        try{
+            const data = await fetch(`${this.url}/conversation?conversation_id=${conversation_id}`) 
+            const conversation = await data.json()
+            return conversation
+        } catch (error){
+            console.log("Error getting conversation 🔴🔴: ", error)
+        }
+    }
 
+
+    async getUserConversations(user_id){
+        try{
+            const data = await fetch(`${this.url}/conversations?user_id=${user_id}`) 
+            const conversations = await data.json()
+            return conversations
+        } catch (error){
+            console.log("Error getting conversations 🔴🔴: ", error)
+        }
+    }
+
+
+    async getConversationMessages(conversation_id) {
+        const response = await fetch(`${this.url}/message?conversation_id=${conversation_id}`)
+        console.log("Messages response: ", response)
         if(response.ok){
             const message = await response.json()
+            console.log("Actual messages: ", message)
             return message
         }
 

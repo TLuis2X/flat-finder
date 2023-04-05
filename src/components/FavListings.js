@@ -68,6 +68,7 @@ const FavListings = ({favListings, setSelectedListing}) => {
         ) : (
          FavouriteListings && FavouriteListings.slice(0, 3).map((listing) => (
             <Carousel
+              key={listing.id}
               style={{
                 width: "350px",
                 padding: "5px",
@@ -78,7 +79,7 @@ const FavListings = ({favListings, setSelectedListing}) => {
             >
               {listing &&
                 listing.images.map((image, index) => (
-                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect} key={image}>
                     <img
                       className="d-block w-150"
                       src={image}

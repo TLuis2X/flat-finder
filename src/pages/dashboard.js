@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoComplete } from "antd";
+import { AutoComplete, message } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
 import FavListings from "@/components/FavListings"
@@ -21,12 +21,15 @@ import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
-import {notification} from 'antd'
+import { notification } from "antd";
+import ForumPostService from "@/services/ForumPostService";
+import NotificationService from "@/services/NotificationService";
+import MessageService from "@/services/messageService";
+import Inbox from "@/components/Inbox";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
-
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
@@ -36,15 +39,23 @@ function FlatifyDashboard() {
   const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [conversations, setConversations] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
 
+  const userRef = useRef(user);
+  const ownListingsRef = useRef(ownListings);
+
   const userService = new UserService();
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
   const ticketService = new TicketService();
+  const messageService = new MessageService();
+  const forumPostService = new ForumPostService();
+  const notificationService = new NotificationService(api);
 
   const supabase = useSupabaseClient();
   const router = useRouter();
@@ -52,81 +63,104 @@ function FlatifyDashboard() {
   async function handleLogout() {
     await userService.logout(supabase);
   }
-  
-  function handleMessageEvent(payload){
-    const new_record = payload.new
-  }
 
-  function handleForumEvent(payload){
-    const new_record = payload.new;
-    console.log({new_record})
-    for (const listing of ownListings){
-      console.log({listing})
-      if (listing.forum == new_record.forum){
-        //get user
-        console.log("Inside if statement of handleForumEvent")
-        alert('You received a comment on one of your listings: ' + new_record.content )
+  async function handleMessageEvent(new_record, user) {
+    //if we sent the message, don't notify!
+    if (new_record.sender_id !== user.id) {
+      const conversation = await messageService.getConversationById(
+        new_record.conversation_id
+      );
+      console.log("Here is the user state var: ", { user });
+      if (conversation.user1.id === user.id) {
+        notificationService.privateMessage(new_record, conversation.user2);
+      } else if (conversation.user2.id === user.id) {
+        notificationService.privateMessage(new_record, conversation.user1);
+      } else {
+        console.log(
+          "The message was not sent to you: ",
+          user.id,
+          " the conversation is between:",
+          conversation.user1.id,
+          " and ",
+          conversation.user2.id
+        );
       }
     }
   }
 
-  const openNotification = (placement) => {
-    api.info({
-      message: `Notification ${placement}`,
-      description: <ForumPost />,
-      placement,
-    });
-  };
-  
-  const forumPostChannel = supabase
-    .channel('table-db-changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'forum_post',
-      },
-      (payload) => {
-        console.log(payload)
-        handleForumEvent(payload)
+  async function handleForumEvent(new_record, ownListings) {
+    console.log("Inside handleForumEvent: ", new_record);
+    // const new_record = payload.new;
+    console.log({ new_record });
+    console.log({ ownListings });
+    for (const listing of ownListings) {
+      console.log({ listing });
+      if (listing.forum == new_record.forum) {
+        //get user
+        console.log("Inside if statement of handleForumEvent");
+        const fullPost = await forumPostService.getPostById(new_record.id);
+        notificationService.forumPost(fullPost, listing.address.city);
       }
-    ).subscribe()
+    }
+  }
+  
+  async function handleTicketEvent(new_record, eventType, user) {
+    if (new_record.creator === user.id){
+      if (eventType === 'UPDATE'){
+        setTickets(prev => {
+          const index = prev.findIndex((ticket) => ticket.id === new_record.id)
+          if (index !== -1){
+            const new_tickets = [...prev];
+            new_tickets[index] = new_record;
+            return new_tickets
+          }
+        })
+        notificationService.ticketUpdate(new_record)
+      } else if (eventType === 'DELETE'){
+        //to implement
+      }
+      
+    }
+}
 
-    // const messagesChannel = supabase
-    // .channel('table-db-changes')
-    // .on(
-    //   'postgres_changes',
-    //   {
-    //     event: '*',
-    //     schema: 'public',
-    //     table: 'message',
-    //   },
-    //   (payload) => console.log(payload)
-    // ).subscribe()
 
-
-
-  function handleRealtimeEvents(event, data){
-    console.log({event, data})
+  function handleRealtimeEvents(payload, user, ownListings){
+    console.log(payload)
+    const [new_record, table, eventType] = [payload.new, payload.table, payload.eventType];
+    switch (table){
+      case 'forum_post':
+        handleForumEvent(new_record,ownListings)
+        break;
+      case "message":
+        handleMessageEvent(new_record, user);
+        break;
+      case 'ticket':
+        handleTicketEvent(new_record, eventType, user)
+      default:
+        console.log(payload);
+    }
   }
 
   useEffect(() => {
     // Supabase client setup
     const channel = supabase
-    .channel('table-db-changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'message',
-      },
-      (payload) => console.log(payload)
-    )
-    .subscribe()
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+        },
+        (payload) =>
+          handleRealtimeEvents(payload, userRef.current, ownListingsRef.current)
+      )
+      .subscribe();
   }, [supabase]);
-  
+
+  useEffect(() => {
+    userRef.current = user;
+    ownListingsRef.current = ownListings;
+  }, [user, ownListings]);
 
   useEffect(() => {
     (async () => {
@@ -134,23 +168,31 @@ function FlatifyDashboard() {
         userService.getAuthUserProfile(supabase),
         listingService.getListings(),
       ]);
-      user_profile.is_admin && router.push("/admin");
+      // user_profile.is_admin && router.push("/admin");
       setUser(user_profile);
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets] = await Promise.all(
-        [
+      const [new_favListings, new_ownListings, new_tickets, new_conversations] =
+        await Promise.all([
           favListingSevice.getFavListing(user_profile.id),
           listingService.getOwnListing(user_profile.id),
           ticketService.getUserTicket(user_profile.id),
-        ]
-      );
-      console.log({ new_favListings });
+          messageService.getUserConversations(user_profile.id),
+        ]);
+      // console.log({ new_favListings });
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
-      console.log({ favListings });
+      setConversations(new_conversations);
+
+      const twoDMessageArray = await Promise.all(
+        new_conversations.map((conversation) => {
+          return messageService.getConversationMessages(conversation.id);
+        })
+      );
+      console.log({ twoDMessageArray });
+      setMessages(twoDMessageArray);
     })();
   }, []);
 
@@ -280,7 +322,15 @@ function FlatifyDashboard() {
               setListings={setListings}
             />
           )}
-          {tabKey == "5" && <div>Inbox</div>}
+          {tabKey == "5" && (
+            <Inbox
+              setConversation={setConversations}
+              messages={messages}
+              setMessages={setMessages}
+              conversation={conversations}
+              user={user}
+            />
+          )}
         </Content>
         <Footer
           style={{

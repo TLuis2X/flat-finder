@@ -53,12 +53,10 @@ const AdminDashboard = () => {
   const listingService = new ListingService();
   const ticketService = new TicketService();
   const supabase = useSupabaseClient();
-  const router = useRouter();
 
   async function handleLogout() {
     console.log("clicked on logout");
     await userService.logout(supabase);
-    router.push("/");
   }
 
   useEffect(() => {
@@ -162,7 +160,9 @@ const AdminDashboard = () => {
             </div>
           )}
           {tabKey == "2" && <AdminResultPage listings={listings} />}
-          {tabKey == "3" && <AdminTicketResolver tickets={tickets} />}
+          {tabKey == "3" && (
+            <AdminTicketResolver tickets={tickets} user={user} />
+          )}
         </Content>
         <Footer
           style={{

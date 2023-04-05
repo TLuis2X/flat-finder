@@ -1,10 +1,10 @@
 import {useState} from 'react'
 import {Modal, Form, Row, Col, Button, Input} from 'antd'
+import Lottie from '@amelix/react-lottie'
+import { successOptions } from '@/utils'
 import { Avatar } from '@chakra-ui/react';
 import { MessageOutlined } from '@ant-design/icons';
-import { successOptions } from '@/utils'
 import MessageService from '@/services/messageService';
-import Lottie from '@amelix/react-lottie'
 
 
 

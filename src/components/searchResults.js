@@ -203,7 +203,7 @@ const SearchResultPage = (props) => {
             defaultCurrent={1}
             current={sliceIndex/3}
             defaultPageSize={3}
-            total={displayListings.length}
+            total={searchedListings.length}
             onChange={handlePagination}
           />
         </div>

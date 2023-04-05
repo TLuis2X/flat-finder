@@ -14,22 +14,16 @@ import {
   Space,
   Tag,
   message,
-  Empty
+  Empty,
 } from "antd";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
 
 import {
   CheckCircleOutlined,
-  ClockCircleOutlined,
   CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  MinusCircleOutlined,
   SyncOutlined,
-  CloseOutlined,
-  DeleteFilled,
-  DeleteOutlined,
-  DeleteTwoTone
+  DeleteTwoTone,
 } from "@ant-design/icons";
 
 function TicketsComponent({ user_id, setTickets, tickets }) {
@@ -94,76 +88,130 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
       >
         My tickets
       </Divider>
-      <Row style={{ display: "flex", marginLeft: "-8px", textAlign: "center", justifyContent: 'center' }}>
-        { !tickets.length ? 
-        <Empty description={<p style={{color: 'gray'}}>Ticket history will show here</p>} /> :
-        tickets.map((ticket) => (
-          <Card
-            className="card hover-bg"
-            title={
-              <div style={{display: 'flex', alignItems: 'center', justifyContent: "space-between"}}>
-                Status: &nbsp;
-                {ticket.status === "resolved" && (
-                  <Tag icon={<CheckCircleOutlined />} color="success">
-                    resolved
-                  </Tag>
-                )}
-                {ticket.status === "in-progress" && (
-                  <Tag icon={<SyncOutlined spin />} color="processing">
-                    in progress
-                  </Tag>
-                )}
-                {ticket.status === "unresolved" && (
-                  <Tag  style={{display: 'flex', alignItems: 'center', gap: '0.3rem'}} color="error">
-                    <CloseCircleOutlined />unresolved
-                  </Tag>
-                )}
-                <Popconfirm
-                  title="Delete ticket"
-                  description="Do you wish to delete this ticket?"
-                  onConfirm={() => removeTicket(ticket.id)}
-                  onCancel={handleCancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  {/* <Button> */}
-                  <DeleteTwoTone />
-                  {/* </Button> */}
-                </Popconfirm>
-              </div>
+      <Row
+        style={{
+          display: "flex",
+          marginLeft: "-8px",
+          textAlign: "center",
+          justifyContent: "center",
+        }}
+      >
+        {!tickets.length ? (
+          <Empty
+            description={
+              <p style={{ color: "gray" }}>Ticket history will show here</p>
             }
-            bordered={false}
-            style={{
-              width: 300,
+          />
+        ) : (
+          tickets.map((ticket) => (
+            <Card
+              className="card hover-bg"
+              title={
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  Status: &nbsp;
+                  {ticket.status === "resolved" && (
+                     <div style={{width: 90}}>
+                     <Tag 
+                     style={{
+                       display: "flex",
+                       alignItems: "center",
+                       gap: "0.3rem",
+                       flexGrow: 0,
+                       flexShrink: 0,
+                     }} 
+                     color="success">
+                       <CheckCircleOutlined />
+                       resolved
+                     </Tag>
+                     </div>
+                  )}
+                  {ticket.status === "in-progress" && (
+                    <div style={{width: 110}}>
+                    <Tag 
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.3rem",
+                      flexGrow: 0,
+                      flexShrink: 0,
+                    }} 
+                    color="processing">
+                      <SyncOutlined spin/>
+                      in progress
+                    </Tag>
+                  </div>
+                  )}
+                  {ticket.status === "unresolved" && (
+                    <Tag
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.3rem",
+                      }}
+                      color="error"
+                    >
+                      <CloseCircleOutlined />
+                      unresolved
+                    </Tag>
+                  )}
+                  <Popconfirm
+                    title="Delete ticket"
+                    description="Do you wish to delete this ticket?"
+                    onConfirm={() => removeTicket(ticket.id)}
+                    onCancel={handleCancel}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    {/* <Button> */}
+                    <DeleteTwoTone />
+                    {/* </Button> */}
+                  </Popconfirm>
+                </div>
+              }
+              bordered={false}
+              style={{
+                width: 300,
 
-              overflow: "visible",
-              wordWrap: "break-word",
-              marginRight: 50,
-              marginBottom: 10,
-              marginLeft: 35,
-              textAlign: "left",
-            }}
-          >
-            &nbsp;
-            <h3>
-              <strong>Title: </strong>
-              {ticket.title}
-            </h3>
-            <p>
-              <strong>Description: </strong>
-              {ticket.content}
-            </p>
-          </Card>
-        ))}
-        
+                overflow: "visible",
+                wordWrap: "break-word",
+                marginRight: 50,
+                marginBottom: 10,
+                marginLeft: 35,
+                textAlign: "left",
+              }}
+            >
+              &nbsp;
+              <h3>
+                <strong>Title: </strong>
+                {ticket.title}
+              </h3>
+              <p>
+                <strong>Description: </strong>
+                {ticket.content}
+              </p>
+              <p>
+                <strong>Admin comments: </strong>
+                {ticket.admin_comment
+                  ? ticket.admin_comment
+                  : "comments made by admin will be visible here"}
+              </p>
+            </Card>
+          ))
+        )}
       </Row>
       <br />
-        <div>
-          <Button type="primary" onClick={showModal}>
-            Add ticket
-          </Button>
-          <br />
-        </div>
+      <div>
+        <Button type="primary" onClick={showModal}>
+          Add ticket
+        </Button>
+        <br />
+      </div>
       <br />
       <br></br>
 

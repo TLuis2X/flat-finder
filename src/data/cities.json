@@ -47,6 +47,10 @@
     {
       "name": "Northamptonshire",
       "country": "United Kingdom"
+    },
+    {
+      "name": "Madrid",
+      "country": "Spain"
     }
   ]
 }

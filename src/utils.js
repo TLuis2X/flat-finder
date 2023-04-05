@@ -2,13 +2,15 @@ import { Form, Select } from "antd";
 import successData from "./data/successfully-done.json";
 import laodingData from "./data/square-loading.json";
 import contentModeration from "./data/content-moderation.json";
+import consultantWelcome from "./data/singing-contract.json";
+
 import {
   SearchOutlined,
   AppstoreAddOutlined,
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
-  GlobalOutlined
+  GlobalOutlined,
 } from "@ant-design/icons";
 
 function getItem(label, key, icon, children) {
@@ -23,7 +25,7 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Search", "2", <SearchOutlined />),
-  getItem('Global View', "3", <GlobalOutlined />),
+  getItem("Global View", "3", <GlobalOutlined />),
   getItem("Add listings", "4", <AppstoreAddOutlined />),
   getItem("Inbox", "5", <InboxOutlined />),
   getItem("Logout", "6", <LogoutOutlined />),
@@ -58,6 +60,15 @@ const moderationOption = {
   loop: true,
   autoplay: true,
   animationData: contentModeration,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const consultantHome = {
+  loop: true,
+  autoplay: true,
+  animationData: consultantWelcome,
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
@@ -128,6 +139,7 @@ export {
   loadingOptions,
   emptyListing,
   moderationOption,
+  consultantHome,
   beforeUpload,
   getBase64,
 };

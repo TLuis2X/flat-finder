@@ -25,7 +25,6 @@ export default class TicketService {
     const response = await fetch(`${this.url}/tickets`);
     console.log(response);
 
-    console.log(tickets);
     if (response.ok) {
       const tickets = await response.json();
       return tickets;
@@ -62,7 +61,7 @@ export default class TicketService {
     return response;
   }
 
-  async changeStatus(ticketID, newStatus) {
+  async changeStatus(ticketID, newStatus, admin_comment) {
     const response = await fetch(`${this.url}/ticket`, {
       method: "PUT",
       headers: {
@@ -71,11 +70,13 @@ export default class TicketService {
       body: JSON.stringify({
         ticketID,
         newStatus,
+        admin_comment,
       }),
     });
 
     if (response.ok) {
       const result = await response.json();
+      console.log(result);
       return result;
     }
     return response;
