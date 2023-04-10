@@ -15,6 +15,7 @@ const AdminTicketResolver = (props) => {
   const ticketService = new TicketService();
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [comment, setComment] = useState("");
+  const [newStatus, setNewStatus] = useState("");
 
   const onFinish = () => {
     console.log("Submitting comment:", comment);
@@ -69,20 +70,20 @@ const AdminTicketResolver = (props) => {
     setOpen(false);
   };
 
-  function changeStatus(newStatus) {
-    const ticketId = selectedTicket.id;
+  // function changeStatus(newStatus) {
+  //   const ticketId = selectedTicket.id;
 
-    ticketService
-      .changeStatus(ticketId, newStatus, comment)
-      .then(() => {
-        console.log("Ticket status and comment updated successfully");
-        setSelectedTicket({ ...selectedTicket, status: newStatus });
-        setComment("");
-      })
-      .catch((error) => {
-        console.log("Error updating ticket status:", error);
-      });
-  }
+  //   ticketService
+  //     .changeStatus(ticketId, newStatus, comment)
+  //     .then(() => {
+  //       console.log("Ticket status and comment updated successfully");
+  //       setSelectedTicket({ ...selectedTicket, status: newStatus });
+  //       setComment("");
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error updating ticket status:", error);
+  //     });
+  // }
 
   const { Search, TextArea } = Input;
 
@@ -100,7 +101,7 @@ const AdminTicketResolver = (props) => {
           <Card
             type="inner"
             title={<p>Ticket id: {selectedTicket.id}</p>}
-            extra={<p>User id: {props.user.id}</p>}
+            extra={<p>User id: {selectedTicket.creator.id}</p>}
           >
             <h3>
               <strong>Title: </strong>
@@ -155,33 +156,38 @@ const AdminTicketResolver = (props) => {
                     placeholder="Enter comment here..."
                   />
                 </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Add Comment
-                  </Button>
-                </Form.Item>
               </Form>
-              <Dropdown
-                overlay={
-                  <Menu
-                    onClick={(e) => {
-                      changeStatus(e.key);
-                      console.log(e);
-                    }}
-                  >
-                    <Menu.Item key="resolved">resolved</Menu.Item>
-                    <Menu.Item key="unresolved">unresolved</Menu.Item>
-                    <Menu.Item key="in-progress">in progress</Menu.Item>
-                  </Menu>
-                }
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    Update ticket status
-                    <DownOutlined />
-                  </Space>
-                </a>
-              </Dropdown>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <Dropdown
+                  overlay={
+                    <Menu
+                      onClick={(e) => {
+                        setNewStatus(e.key);
+                        console.log(e);
+                      }}
+                    >
+                      <Menu.Item key="resolved">resolved</Menu.Item>
+                      <Menu.Item key="unresolved">unresolved</Menu.Item>
+                      <Menu.Item key="in-progress">in progress</Menu.Item>
+                    </Menu>
+                  }
+                >
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      Update ticket status
+                      <DownOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  // style={{ marginTop: "1rem" }}
+                  onClick={() => onFinish()}
+                >
+                  Update ticket
+                </Button>
+              </div>
             </div>
             <br />
             <div>

@@ -3,6 +3,7 @@ import FavListings from "./FavListings";
 import OwnListings from "./OwnListings";
 import TicketsComponent from "./Tickets";
 import ListingInfo from "./ListingInfo";
+import { useSelector } from "react-redux";
 
 const ConsultantHomePage = ({
   favListings,
@@ -11,14 +12,15 @@ const ConsultantHomePage = ({
   setTickets,
   tickets,
 }) => {
-  const [selectedListing, setSelectedListing] = useState("");
+  // const [selectedListing, setSelectedListing] = useState("");
+  const selectedListing = useSelector(state => state.selectedListing)
 
   return (
     <>
-      {selectedListing ? (
+      {Object.keys(selectedListing).length ? (
         <ListingInfo
           listing={selectedListing}
-          setSelectedListing={setSelectedListing}
+          // setSelectedListing={setSelectedListing}
           userId={user_id}
         />
       ) : (
@@ -33,14 +35,14 @@ const ConsultantHomePage = ({
           <div>
             <FavListings
               favListings={favListings}
-              setSelectedListing={setSelectedListing}
+              // setSelectedListing={setSelectedListing}
             />
           </div>
 
           <div>
             <OwnListings
               ownListings={ownListings}
-              setSelectedListing={setSelectedListing}
+              // setSelectedListing={setSelectedListing}
             />
           </div>
           <div

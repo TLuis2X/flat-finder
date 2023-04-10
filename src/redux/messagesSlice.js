@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { emptyUser } from "../models/User";
 
 const messages = createSlice({
   name: "allMessages",
@@ -10,7 +9,7 @@ const messages = createSlice({
       state = action.payload;
       return state;
     },
-    readMessage(state, action){
+    readConversation(state, action) {
       console.log(
         "🟢🟢🟢🟢🟢🟢🟢🟢 PAYLOAD IN READ MESSAGE YOOO MESSAGE YO 🟢🟢🟢🟢🟢🟢🟢🟢",
         action.payload
@@ -21,11 +20,13 @@ const messages = createSlice({
           conversation[0].conversation_id === action.payload.conversation_id
       );
       if (conversationIndex !== -1) {
-        const messageIndex = state[conversationIndex].findIndex((message) => message.id === action.payload.id)
-        state[conversationIndex][messageIndex] = action.payload;
-        return state
+        state[conversationIndex].forEach((message) => {
+          if (action.payload.sender_id === message.sender_id) {
+            message.is_read = true;
+          }
+        });
+        return state;
       }
-
     },
     addMessage(state, action) {
       console.log(
@@ -51,5 +52,6 @@ const messages = createSlice({
   },
 });
 
-export const { setAllMessages, addMessage, readMessage } = messages.actions;
+export const { setAllMessages, addMessage, readConversation } =
+  messages.actions;
 export default messages.reducer;

@@ -10,7 +10,6 @@ export default class ListingService {
    */
   async getListings() {
     const response = await fetch(`${this.url}/listings`);
-
     if (response.ok) {
       const listings = await response.json();
       return listings;

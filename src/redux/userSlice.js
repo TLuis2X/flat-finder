@@ -9,8 +9,12 @@ const userSlice = createSlice({
       console.log("Payload inside reducer: ", action.payload);
       Object.assign(state, action.payload);
     },
+    setAvatarUrl(state, action){
+      state.avatar_url = action.payload;
+      return state;
+    }
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setAvatarUrl} = userSlice.actions;
 export default userSlice.reducer;

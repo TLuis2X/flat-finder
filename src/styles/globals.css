@@ -13,6 +13,10 @@
   /* outline: red 1px solid; */
 }
 
+.outline {
+  /* outline: red 1px solid; */
+}
+
 .send-message-btn {
   border-style: none;
   border-radius: 5px;
@@ -113,4 +117,67 @@
     border: 1px solid rgba(0, 0, 0, 0.05) !important;
     transform: translateY(0);
   }
+}
+
+.senderBubble,
+.receiverBubble {
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  /* align-content: center; */
+  /* align-self: center; */
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.senderBubble {
+  background-color: #2196f3;
+  justify-content: center;
+  color: white;
+}
+
+.receiverBubble {
+  background-color: #e0e0e0;
+  justify-content: center;
+}
+
+.glass-icon-container {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px) brightness(1.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.top-right {
+  top: 10px;
+  right: 10px;
+}
+
+.bottom-right {
+  bottom: 10px;
+  right: 10px;
+}
+
+.icon {
+  font-size: 18px;
+  color: black;
+  /* box-shadow: 0 6px 8px rgb(0, 0, 0); */
+  /* border: solid; */
+  /* border-color: black; */
+}
+
+.glass-icon-container:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
 }

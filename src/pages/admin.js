@@ -2,6 +2,7 @@ import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import AdminResultPage from "@/components/adminResults";
+import AdminListingView from "@/components/AdminListingView";
 import Lottie from "@amelix/react-lottie";
 import { moderationOption } from "@/utils";
 import {
@@ -10,6 +11,8 @@ import {
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
+  ContainerOutlined,
+  ShopOutlined
 } from "@ant-design/icons";
 import AdminTicketResolver from "@/components/AdminTicketResolver";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
@@ -23,6 +26,7 @@ import ListingService from "@/services/ListingService";
 import TicketService from "@/services/TicketService";
 import ListingInfo from "@/components/ListingInfo";
 import { useRouter } from "next/router";
+import TicketView from "@/components/TicketView";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -38,7 +42,9 @@ const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Delete listings", "2", <SearchOutlined />),
   getItem("Tickets", "3", <InboxOutlined />),
-  getItem("Logout", "4", <LogoutOutlined />),
+  getItem('Listings View', '4', <ShopOutlined />),
+  getItem('Tickets View', '5', <ContainerOutlined />),
+  getItem("Logout", "6", <LogoutOutlined />),
 ];
 
 const AdminDashboard = () => {
@@ -87,7 +93,7 @@ const AdminDashboard = () => {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div
+        {/* <div
           style={{
             height: 38,
             margin: 12,
@@ -98,6 +104,31 @@ const AdminDashboard = () => {
         >
           FDM
         </div>
+         */}
+        <div
+          style={{
+            height: 38,
+            margin: 12,
+            // background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: collapsed ? "center" : "flex-start",
+          }}
+        >
+          <img
+            src={collapsed ? "/fdm.png" : "/fdm.png"}
+            style={{
+              height: collapsed ? 32 : 40,
+              width: collapsed ? 48 : 64,
+              marginRight: 18,
+              marginLeft: collapsed ? 18 : 60,
+              alignItems: collapsed ? "normal" : "center",
+              justifyContent: collapsed ? "normal" : "center",
+            }}
+          />
+        </div>
 
         <Menu
           theme="dark"
@@ -105,7 +136,7 @@ const AdminDashboard = () => {
           mode="inline"
           items={items}
           onClick={({ key }) => {
-            if (key === "4") {
+            if (key === "6") {
               handleLogout();
             } else {
               setTabKey(key);
@@ -163,6 +194,10 @@ const AdminDashboard = () => {
           {tabKey == "3" && (
             <AdminTicketResolver tickets={tickets} user={user} />
           )}
+
+          {tabKey == "4" && <AdminListingView listings={listings} user_id={user.id} />}
+
+          {tabKey == '5' && <TicketView tickets={tickets} setTickets={setTickets} />}
         </Content>
         <Footer
           style={{

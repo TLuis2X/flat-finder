@@ -22,14 +22,18 @@ function getItem(label, key, icon, children) {
   };
 }
 
-const items = [
-  getItem("Home", "1", <HomeOutlined />),
-  getItem("Search", "2", <SearchOutlined />),
-  getItem("Global View", "3", <GlobalOutlined />),
-  getItem("Add listings", "4", <AppstoreAddOutlined />),
-  getItem("Inbox", "5", <InboxOutlined />),
-  getItem("Logout", "6", <LogoutOutlined />),
-];
+// const items = [
+//   getItem("Home", "1", <HomeOutlined />),
+//   getItem("Search", "2", <SearchOutlined />),
+//   getItem("Global View", "3", <GlobalOutlined />),
+//   getItem("Add listings", "4", <AppstoreAddOutlined />),
+//   getItem("Inbox", "5", <div style={{position: 'relative'}}>
+//                         {badgeCount > 0 && (
+//                         <Badge count={badgeCount} style={{ marginLeft: "5px" }} />)}
+//                         <InboxOutlined />
+//                         </div>),
+//   getItem("Logout", "6", <LogoutOutlined />),
+// ];
 
 const { Option } = Select;
 const suffixSelector = (
@@ -133,7 +137,7 @@ const getBase64 = (img, callback) => {
 };
 
 export {
-  items,
+  // items,
   suffixSelector,
   successOptions,
   loadingOptions,

@@ -14,6 +14,7 @@ import {
   Image,
   Descriptions,
   Carousel,
+  Typography,
 } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 
@@ -22,15 +23,21 @@ import ForumPostService from "@/services/ForumPostService.js";
 import ForumPost from "./ForumPost.js";
 import { Avatar, flexbox } from "@chakra-ui/react";
 import AdOwnerCard from "./AdOwnerCard.js";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedListing } from "@/redux/selectedListingSlice";
 
 const { TextArea } = Input;
+const { Paragraph } = Typography;
 
-const ListingInfo = ({ listing, setSelectedListing, userId }) => {
+const ListingInfo = ({ userId }) => {
   const [content, setContent] = useState("");
   const [forumPosts, setForumPosts] = useState([]);
+  const listing = useSelector(state => state.selectedListing)
   const { owner } = listing;
 
   const forumPostService = new ForumPostService();
+  const dispatch = useDispatch();
+
 
   async function addPost() {
     if (content.length > 0) {
@@ -58,17 +65,20 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
   }, []);
   return (
     <>
-      <Button onClick={() => setSelectedListing(false)}>
+      <Button onClick={() => dispatch(setSelectedListing({}))}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </Button>{" "}
       <br></br>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex"}}>
         <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
-        <p>
-          Listing id:
-          {listing.id}
-        </p>
+
+        <Paragraph copyable = {{text: listing.id,
+                                tooltips: ['Copy ID', 'ID Copied!!'],
+                                }}> </Paragraph>
+
       </div>
+      
+      
       <Descriptions.Item>
         <div
           style={{
@@ -153,7 +163,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
       </Descriptions>
       <Descriptions>
         <Descriptions.Item label="View it on a map">
-          <Map coordinates={[listing.coordinates]} />
+          <Map listings={[listing]} />
         </Descriptions.Item>
       </Descriptions>
       <div>

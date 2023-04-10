@@ -25,6 +25,7 @@ import {
   SyncOutlined,
   DeleteTwoTone,
 } from "@ant-design/icons";
+import { ticketService } from "@/services/Instances";
 
 function TicketsComponent({ user_id, setTickets, tickets }) {
   const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   const [success, setSuccess] = useState(false);
   const [messageApi, alert] = message.useMessage();
 
-  const ticketService = new TicketService();
+  // const ticketService = new TicketService();
 
   const showModal = () => {
     setOpen(true);
@@ -47,25 +48,27 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   };
 
   const handleOk = async () => {
-    setConfirmLoading(true);
-    if (title && content) {
-      const new_ticket = await ticketService.addTicket(title, content, user_id);
-      console.log("Ticket that we got back: ", new_ticket);
-      setConfirmLoading(false);
-      setSuccess(true);
-      setTimeout(() => {
-        setTickets((prev) => prev.concat([new_ticket]));
-        setTitle("");
-        setContent("");
-        setOpen(false);
-        setSuccess(false);
-      }, 2000);
-    } else {
-      setConfirmLoading(false);
-      messageApi.open({
-        type: "error",
-        content: "Please fill in both title and description",
-      });
+    if (!success) {
+      setConfirmLoading(true);
+      if (title && content) {
+        const new_ticket = await ticketService.addTicket(title, content, user_id);
+        console.log("Ticket that we got back: ", new_ticket);
+        setConfirmLoading(false);
+        setSuccess(true);
+        setTimeout(() => {
+          setTickets((prev) => prev.concat([new_ticket]));
+          setTitle("");
+          setContent("");
+          setOpen(false);
+          setSuccess(false);
+        }, 2000);
+      } else {
+        setConfirmLoading(false);
+        messageApi.open({
+          type: "error",
+          content: "Please fill in both title and description",
+        });
+      }
     }
   };
 
@@ -220,6 +223,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
+        footer={success ? <></> : undefined}
         onCancel={handleCancel}
       >
         {success ? (

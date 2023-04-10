@@ -8,42 +8,45 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { beforeUpload, getBase64 } from "@/utils";
 
 import UserService from "@/services/UserService";
+import { useDispatch, useSelector } from "react-redux";
+import { setAvatarUrl } from "@/redux/userSlice";
 
 
-const ProfilePicture = ({ url, user_id,name }) => {
+const ProfilePicture = ({ url, name }) => {
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
+  const [hasRun, setHasRun] = useState(0);
   const supabase = useSupabaseClient();
   const userService = new UserService()
-
-  useEffect(() => {
-    setImageUrl(url)
-  }, [url])
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch();
 
   const handleChange = async (info) => {
     console.log(info)
     const avatarFile = info.file.originFileObj
-    if (info.file.status === "uploading") {
+    if (info.file.status === "uploading" && !loading) {
       setLoading(true);
       const { data, error } = await supabase
       .storage
       .from('assets')
       .upload(avatarFile.name, avatarFile, {
         cacheControl: '3600',
-        upsert: false
+        upsert: true
       })
       console.log({data, error})
       return;
     }
-    if (info.file.status === "done") {
+    if (info.file.status === "done" && loading) {
       // Get this url from response in real world.
+      setHasRun(prev => prev+1)
       getBase64(info.file.originFileObj, (url) => {
       const { data } = supabase.storage
         .from('assets')
         .getPublicUrl(avatarFile.name)
+        userService.updateAvatar(supabase, data.publicUrl, user.id)     
+        console.log('PublicUrl that should work! : ', data.publicUrl) 
+        // setImageUrl(data.publicUrl);
+        dispatch(setAvatarUrl(data.publicUrl))
         setLoading(false);
-        userService.updateAvatar(supabase, data.publicUrl, user_id)      
-        setImageUrl(data.publicUrl);
       });
     }
   };
@@ -69,7 +72,7 @@ const ProfilePicture = ({ url, user_id,name }) => {
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
-        <Avatar size='xl' name={name} src={imageUrl}/>
+        <Avatar size='xl' name={name} src={user.avatar_url}/>
       </Upload>
     </>
   );
@@ -77,125 +80,4 @@ const ProfilePicture = ({ url, user_id,name }) => {
 export default ProfilePicture;
       
 
-      
-// {imageUrl ? (
-//   <Image
-//   preview={false}
-//   width={200}
-//   src={imageUrl}
-//   alt="avatar"
-//   style={{
-//     width: "100%",
-//   }}
-//   />
-//   ) : (
-//   uploadButton
-//   )}
-
-// import React, { useEffect, useState } from 'react'
-// import { useSupabaseClient } from '@supabase/auth-helpers-react'
-// import UserService from '@/services/UserService'
-// import {Button} from 'antd'
-// import styles from '../styles/dashboardright.module.css'
-
-// export default function Avatar({ user, url }) {
-//   const supabase = useSupabaseClient()
-//   const userService = new UserService()
-//   const [avatarUrl, setAvatarUrl] = useState(null)
-//   const [uploading, setUploading] = useState(false)
-
-//   useEffect(() => {
-//     if (url) downloadImage(url)
-//   }, [url])
-
-//   useEffect(() => {
-//     if (user) setAvatarUrl(user.avatar_url)
-//   }, [user])
-
-//   async function downloadImage(path) {
-//     try {
-//       const { data, error } = await supabase.storage.from('assets').download(path)
-//       if (error) {
-//         throw error
-//       }
-//       const url = URL.createObjectURL(data)
-//       setAvatarUrl(url)
-//     } catch (error) {
-//       console.log('Error downloading image: ', error)
-//     }
-//   }
-
-//   const onUpload = (filePath) => {
-//     const {data} = supabase.storage
-//     .from('assets')
-//     .getPublicUrl(filePath)
-
-//     // console.log(data)
-//     setAvatarUrl(data.publicUrl)
-//     userService.updateAvatar(supabase, data.publicUrl, user.id)
-//   }
-
-
-//   const uploadAvatar = async (event) => {
-//     try {
-//       setUploading(true)
-
-//       if (!event.target.files || event.target.files.length === 0) {
-//         throw new Error('You must select an image to upload.')
-//       }
-
-//       const file = event.target.files[0]
-//       const fileExt = file.name.split('.').pop()
-//       const fileName = `${user.id}.${fileExt}`
-//       const filePath = `${fileName}`
-
-//       let { error: uploadError } = await supabase.storage
-//         .from('assets')
-//         .upload(filePath, file, { upsert: true })
-
-//       if (uploadError) {
-//         throw uploadError
-//       }
-
-//       onUpload(filePath)
-//     } catch (error) {
-//       alert('Error uploading avatar!')
-//       console.log(error)
-//     } finally {
-//       setUploading(false)
-//     }
-//   }
-
-//   return (
-//     <div>
-//       {avatarUrl ? (
-//         <img
-//           src={avatarUrl}
-//           alt="Avatar"
-//           className="avatar image"
-//           style={{ height: 100, width: 100 }}
-//         />
-//       ) : (
-//         <div className="avatar no-image" style={{ height: 100, width: 100 }} />
-//       )}
-//       <div style={{height: 30}}>
-//         <label htmlFor="single">
-//           {uploading ? 'Uploading ...' : 'Upload'}
-//         </label>
-//         <input
-//           style={{
-//             // visibility: 'hidden',
-//             position: 'absolute',
-//           }}
-//           className={styles.input}
-//           size='60'
-//           type="file"
-//           id="single"
-//           accept="image/*"
-//           onChange={uploadAvatar}
-//           disabled={uploading}
-//         />
-//       </div>
-//     </div>
-//   )
-// }
+    

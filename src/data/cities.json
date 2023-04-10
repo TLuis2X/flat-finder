@@ -51,6 +51,26 @@
     {
       "name": "Madrid",
       "country": "Spain"
+    },
+    {
+      "name": "Berlin",
+      "country": "Germany"
+    },
+    {
+      "name": "Barcelona",
+      "country": "Spain"
+    },
+    {
+      "name": "Hong Kong",
+      "country": "Hong Kong"
+    },
+    {
+      "name": "Shanghai",
+      "country": "China"
+    },
+    {
+      "name": "Singapore",
+      "country": "Singapore"
     }
   ]
 }

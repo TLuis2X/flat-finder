@@ -78,7 +78,7 @@ export default class UserService {
         .from("profile")
         .select("*")
         .eq("user_id", String(user_id));
-    return new User(user_profile.data[0]) 
+    return user_profile.data[0] 
   }
 
 }

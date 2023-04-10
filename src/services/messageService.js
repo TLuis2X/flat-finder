@@ -19,6 +19,24 @@ export default class MessageService {
         
         if(response.ok){
             const result = await response.json()
+            return {message: result.data[0], conversation: conversation}
+        }
+
+        return response
+    }
+
+    async sendDirectMessage(sender_id, content, conversation_id){
+        const response = await fetch(`${this.url}/message`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ conversation_id, content, sender_id })
+        })
+
+        
+        if(response.ok){
+            const result = await response.json()
             return result
         }
 
@@ -58,5 +76,28 @@ export default class MessageService {
 
         return response
     }
+
+
+
+  async readUserMessages(sender_id, conversation_id) {
+    const response = await fetch(`${this.url}/messages`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sender_id,
+        conversation_id,
+      }),
+    });
+
+    // console.log("✨✨✨✨✨Here is the RESPONSE: ", response);
+    if (response.ok) {
+      const result = await response.json();
+      console.log("✨✨✨✨✨Here is the RESULT OF READING: ", result);
+      return result;
+    }
+    return response;
+  }
 
 }

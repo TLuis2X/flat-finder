@@ -20,6 +20,7 @@
     "@googlemaps/google-maps-services-js": "^3.3.27",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@react-google-maps/api": "^2.18.1",
+    "@reduxjs/toolkit": "^1.9.3",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^0.9.257",
     "@supabase/auth-helpers-nextjs": "^0.5.6",
@@ -38,6 +39,7 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "18.2.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
     "typewriter-effect": "^2.19.0"
   },

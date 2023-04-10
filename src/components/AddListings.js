@@ -14,13 +14,14 @@ import {
   Modal,
   Progress,
   Typography,
+  notification,
 } from "antd";
 import { useState, useEffect } from "react";
 import { suffixSelector, beforeUpload, getBase64, emptyListing } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import ListingService from "@/services/ListingService";
 import GoogleMapsService from "@/services/GoogleMapsService";
-
+import NotificationService from "@/services/NotificationService";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -47,14 +48,43 @@ function AddListingComponent({
   const listingService = new ListingService();
 
   // setListing(listing.concat());
-
+  const [api, contextHolder] = notification.useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [percent, setPercent] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  // Define the callback function that updates the value of isVerified
+  const onVerifyCallback = (response) => {
+    setIsVerified(true);
+  };
+
+  // Define the callback function that updates the value of isVerified when the user fails to verify
+  const onExpireCallback = () => {
+    setIsVerified(false);
+  };
+
+  // const [api, contextHolder] = notification.useNotification();
+  // const openNotification = (placement) => {
+  //   api.info({
+  //     message: `Error`,
+  //     description: 'Please verify HCaptcha before clicking "Create Listing"',
+  //     placement,
+  //     type: "error",
+  //   });
+  // };
+  const notificationService = new NotificationService(api);
 
   async function handleSubmit() {
     setIsModalOpen(true);
+    if (!isVerified) {
+      console.log("Not verified");
+      setIsModalOpen(false);
+      notificationService.verifyCaptchaMessage("top");
+
+      return;
+    }
+
     const step = 100 / (listing.temp_fileList.length * 2 + 2);
     console.log({ step });
     //Handle pictures updloaded
@@ -136,6 +166,7 @@ function AddListingComponent({
 
   return (
     <div className="card" style={{ padding: "2.5rem" }}>
+      {contextHolder}
       <Modal
         open={isModalOpen}
         style={{ width: 500 }}
@@ -397,34 +428,23 @@ function AddListingComponent({
             </div>
           </Upload>
         </Form.Item>
-        {/* <Form.Item
-          label="Captcha"
-          extra="We must make sure that your are a human."
-        >
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item
-                name="captcha"
-                noStyle
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input the captcha you got!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Button>Get captcha</Button>
-            </Col>
-          </Row>
-        </Form.Item> */}
+
         <Form.Item label="Verify">
+          {/* <HCaptcha
+            sitekey={SITE_KEY_HCAPTCHA}
+            onVerify={(token, ekey) =>
+              handleVerificationSuccess(token, ekey, setIsVerified(true))
+            }
+            // onVerify={
+            //   ((token) => console.log("Verification successful", token),
+            //   setIsVerified(true))
+            // }
+            onError={(error) => console.log("Verification failed", error)}
+          /> */}
           <HCaptcha
             sitekey={SITE_KEY_HCAPTCHA}
-            onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)}
+            onVerify={onVerifyCallback}
+            onExpire={onExpireCallback}
           />
         </Form.Item>
         <Form.Item>

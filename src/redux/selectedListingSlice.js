@@ -6,7 +6,7 @@ const selectedListingSlice = createSlice({
   reducers: {
     setSelectedListing(state, action) {
       console.log("Payload inside reducer: ", action.payload);
-      Object.assign(state, action.payload);
+      return action.payload
     },
   },
 });

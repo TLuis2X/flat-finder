@@ -26,6 +26,7 @@ const AdminResultPage = (props) => {
   const [selectedListing, setSelectedListing] = useState(null);
   const listingsAvailable = props.listings.map((listing) => listing);
   console.log(listingsAvailable);
+  
   function onSearch(listId) {
     console.log("Searching for listing with id:", listId);
     console.log("Available listings:", listingsAvailable);
@@ -43,6 +44,7 @@ const AdminResultPage = (props) => {
   function deleteListing() {
     if (selectedListing.id) {
       listingService.removeListing(selectedListing.id);
+      setSelectedListing(null);
       console.log("inside if statement");
     } else {
       console.log("Error. Listing could not be deleted.");
